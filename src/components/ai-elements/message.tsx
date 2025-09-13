@@ -6,21 +6,35 @@ import {
 import { cn } from "@/lib/utils";
 import type { UIMessage } from "ai";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentProps, HTMLAttributes } from "react";
+import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
 
-export type MessageProps = HTMLAttributes<HTMLDivElement> & {
-  from: UIMessage["role"];
-};
+export type MessageProps = HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof messageContentVariants> & {
+    author: "user" | "assistant";
+    avatar?: string;
+    content?: ReactNode;
+  };
 
-export const Message = ({ className, from, ...props }: MessageProps) => (
+export const Message = ({
+  className,
+  author,
+  avatar,
+  content,
+  variant,
+  ...props
+}: MessageProps) => (
   <div
     className={cn(
-      "group flex w-full items-end justify-end gap-2 py-4",
-      from === "user" ? "is-user" : "is-assistant flex-row-reverse justify-end",
-      className
+      "group flex w-full items-end gap-2 py-4",
+      author === "user" ? "is-user justify-end" : "is-assistant justify-start",
+      className,
     )}
     {...props}
-  />
+  >
+    {author === "assistant" && <MessageAvatar name={avatar} />}
+    <MessageContent variant={variant}>{content}</MessageContent>
+    {author === "user" && <MessageAvatar name={avatar} />}
+  </div>
 );
 
 const messageContentVariants = cva(
@@ -63,7 +77,7 @@ export const MessageContent = ({
 );
 
 export type MessageAvatarProps = ComponentProps<typeof Avatar> & {
-  src: string;
+  src?: string;
   name?: string;
 };
 
@@ -73,8 +87,10 @@ export const MessageAvatar = ({
   className,
   ...props
 }: MessageAvatarProps) => (
-  <Avatar className={cn("size-8 ring-1 ring-border", className)} {...props}>
-    <AvatarImage alt="" className="mt-0 mb-0" src={src} />
-    <AvatarFallback>{name?.slice(0, 2) || "ME"}</AvatarFallback>
+  <Avatar className={cn("size-8 shrink-0 ring-1 ring-border", className)} {...props}>
+    {src && <AvatarImage alt="" className="mt-0 mb-0" src={src} />}
+    <AvatarFallback>
+      {name ? (name.length > 2 ? name.slice(0, 2) : name) : "ME"}
+    </AvatarFallback>
   </Avatar>
 );

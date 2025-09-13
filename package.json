@@ -1,0 +1,25 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/likhonsdev/pocket-dev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/likhonsdev/pocket-dev/issues"
+  },
+  "homepage": "https://github.com/likhonsdev/pocket-dev#readme",
+  "devDependencies": {
+    "@playwright/mcp": "^0.0.37",
+    "tailwindcss": "^4.1.13"
+  }
+}
